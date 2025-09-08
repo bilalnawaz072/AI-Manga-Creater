@@ -126,6 +126,7 @@ export const locales = {
     applyCorrection: "수정안 적용",
     noCorrectionsNeeded: "수정할 항목이 없습니다.",
     analysisError: "분석 중 오류 발생",
+    nothingToExport: "내보낼 항목이 없습니다.",
 
     // Masking Modal
     maskingModalTitle: "수정할 영역 마스킹",
@@ -362,6 +363,7 @@ export const locales = {
     applyCorrection: "Apply Correction",
     noCorrectionsNeeded: "No corrections needed.",
     analysisError: "Error during analysis.",
+    nothingToExport: "Nothing to export.",
 
     // Masking Modal
     maskingModalTitle: "Mask Area to Edit",
@@ -598,6 +600,7 @@ export const locales = {
     applyCorrection: "修正案を適用",
     noCorrectionsNeeded: "修正は必要ありません。",
     analysisError: "分析中にエラーが発生しました",
+    nothingToExport: "エクスポートするものがありません。",
 
     // Masking Modal
     maskingModalTitle: "編集する領域をマスク",

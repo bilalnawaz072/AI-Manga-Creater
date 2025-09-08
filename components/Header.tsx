@@ -12,9 +12,10 @@ interface HeaderProps {
     onShowWorldview: () => void;
     currentView: 'manga-editor' | 'video-producer';
     onSetView: (view: 'manga-editor' | 'video-producer') => void;
+    onExport: () => void;
 }
 
-export function Header({ isSidebarOpen, onToggleSidebar, language, setLanguage, onShowMangaViewer, onShowWorldview, currentView, onSetView }: HeaderProps): React.ReactElement {
+export function Header({ isSidebarOpen, onToggleSidebar, language, setLanguage, onShowMangaViewer, onShowWorldview, currentView, onSetView, onExport }: HeaderProps): React.ReactElement {
   const { t } = useLocalization();
   const [isLangOpen, setIsLangOpen] = useState(false);
 
@@ -82,9 +83,11 @@ export function Header({ isSidebarOpen, onToggleSidebar, language, setLanguage, 
                 )}
             </div>
 
-            <button className="bg-indigo-600 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-500 transition-colors text-sm">
-              {t('export')}
-            </button>
+            {currentView === 'manga-editor' && (
+              <button onClick={onExport} className="bg-indigo-600 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-500 transition-colors text-sm">
+                {t('export')}
+              </button>
+            )}
         </div>
       </div>
     </header>

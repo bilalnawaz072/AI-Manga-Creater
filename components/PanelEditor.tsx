@@ -1,4 +1,7 @@
 
+
+
+
 import React, { useState, useRef, useCallback, useImperativeHandle, useEffect, forwardRef, useMemo } from 'react';
 import type { CanvasShape, BubbleShape, PanelShape, Character, ImageShape, TextShape, ViewTransform, Pose, SkeletonData, DrawingShape, SkeletonPose, ArrowShape } from '../types';
 import { PolygonIcon, TextToolIcon, BubbleToolIcon, TrashIcon, SelectIcon, CircleIcon, SquareIcon, XIcon, BrushIcon, ExpandIcon, ShrinkIcon, HandIcon, PlusIcon, EditPoseIcon, MinusIcon, UploadIcon, RedoIcon, UndoIcon, EyeIcon, EyeOffIcon, ArrowIcon } from './icons';
@@ -290,9 +293,15 @@ export const PanelEditor = forwardRef<
                     canRedo && onRedo();
                 }
           }
-          if (e.key === ' ' && !isSpacePressed.current && !editingShapeId && !posingCharacter) {
-              isSpacePressed.current = true;
-              e.preventDefault();
+          if (e.key === ' ') {
+            const activeEl = document.activeElement;
+            // FIX: Use `instanceof HTMLElement` to safely check for `isContentEditable`.
+            const isInputFocused = activeEl instanceof HTMLElement && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable);
+
+            if (!isInputFocused && !isSpacePressed.current && !editingShapeId && !posingCharacter) {
+                isSpacePressed.current = true;
+                e.preventDefault();
+            }
           }
           if (e.key === 'Escape') {
             setEditingShapeId(null);
@@ -381,6 +390,7 @@ export const PanelEditor = forwardRef<
 // Explicitly ensuring `type` is `'arrow'` when creating an arrow shape.
         case 'arrow': {
             const startPoint = pos;
+            // FIX: Corrected shape type from 'drawing' to 'arrow'.
             newShape = { id, type: 'arrow', points: [startPoint, startPoint], x: pos.x, y: pos.y, strokeColor: '#FF0000', strokeWidth: brushSize };
             setAction({type: 'creating', shape: newShape});
             break;

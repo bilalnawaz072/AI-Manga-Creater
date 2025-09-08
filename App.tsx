@@ -1,4 +1,5 @@
 
+
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Header } from './components/Header';
 import { PanelEditor } from './components/PanelEditor';
@@ -598,6 +599,34 @@ export default function App(): React.ReactElement {
     setViewMode('result');
   }, [currentPage.assistantProposalImage, handleUpdateCurrentPage]);
 
+  const handleExport = useCallback(async () => {
+    if (currentView !== 'manga-editor') return;
+
+    if (viewMode === 'result' && currentPage.generatedImage) {
+        const link = document.createElement('a');
+        link.href = currentPage.generatedImage;
+        link.download = `${currentPage.name.replace(/\s/g, '_')}_result.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else if (viewMode === 'editor' && panelEditorRef.current) {
+        try {
+            setError(null);
+            const layoutImage = await panelEditorRef.current.getLayoutAsImage(true, characters);
+            const link = document.createElement('a');
+            link.href = layoutImage;
+            link.download = `${currentPage.name.replace(/\s/g, '_')}_layout.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (err) {
+            setError(err instanceof Error ? `Export failed: ${err.message}` : "Failed to export layout.");
+        }
+    } else {
+        setError(t('nothingToExport'));
+    }
+  }, [currentView, currentPage, viewMode, characters, t]);
+
 
   const isReadyToGenerate = !!currentPage.sceneDescription;
   const isMonochromeResult = currentPage.generatedImage !== null && currentPage.generatedColorMode === 'monochrome';
@@ -614,6 +643,7 @@ export default function App(): React.ReactElement {
         onShowWorldview={() => setShowWorldviewModal(true)}
         currentView={currentView}
         onSetView={setCurrentView}
+        onExport={handleExport}
       />
       {showCharacterModal && (
         <CharacterGenerationModal
